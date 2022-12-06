@@ -1,0 +1,371 @@
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% OUTPUT %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+==================================================================== UC1 ======================================================================================================================================================================================================
+						 
+						      Ability to create a payroll service database
+						     **********************************************
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| demo               |
+| information_schema |
+| mysql              |
+| payrollservices    |
+| performance_schema |
+| sakila             |
+| sys                |
+| world              |
++--------------------+
+8 rows in set (0.01 sec)
+
+
+======================================================================== UC2 ====================================================================================================================================
+
+			Ability to create a employee payroll table in the payroll service database to manage employee payrolls
+		    **********************************************************************************************************
+
+INSERT INTO employee_Payroll ( name, salary, start) VALUES
+     ('Tom', 900000.00,'2012-09-23' ),
+     ('John',800000.00,'2020-11-20' ),
+     ('Anna',700000.00,'2013-12-09' );
+
+mysql> SELECT * FROM employee_payroll;
++----+------+--------+------------+
+| id | name | salary | start      |
++----+------+--------+------------+
+|  1 | Tom  | 900000 | 2012-09-23 |
+|  2 | John | 800000 | 2020-11-20 |
+|  3 | Anna | 700000 | 2013-12-09 |
++----+------+--------+------------+
+3 rows in set (0.00 sec)
+
+mysql> INSERT INTO employee_Payroll ( name, salary, start) VALUES
+    -> ('Maria',400000.00,'2016-12-09' );
+Query OK, 1 row affected (0.01 sec)
+
+mysql> SELECT * FROM employee_payroll;
++----+-------+--------+------------+
+| id | name  | salary | start      |
++----+-------+--------+------------+
+|  1 | Tom   | 900000 | 2012-09-23 |
+|  2 | John  | 800000 | 2020-11-20 |
+|  3 | Anna  | 700000 | 2013-12-09 |
+|  4 | Maria | 400000 | 2016-12-09 |
++----+-------+--------+------------+
+4 rows in set (0.00 sec)
+
+mysql> INSERT INTO employee_Payroll ( name, salary, start) VALUES
+    -> ('Harry',300000.00,'2021-12-07' );
+Query OK, 1 row affected (0.01 sec)
+
+====================================================================== UC4 ==================================================================================================
+
+                            Retrieving employee details from table
+                            ***************************************
+
+mysql> SELECT * FROM employee_payroll;
++----+-------+--------+------------+
+| id | name  | salary | start      |
++----+-------+--------+------------+
+|  1 | Tom   | 900000 | 2012-09-23 |
+|  2 | John  | 800000 | 2020-11-20 |
+|  3 | Anna  | 700000 | 2013-12-09 |
+|  4 | Maria | 400000 | 2016-12-09 |
+|  5 | Harry | 300000 | 2021-12-07 |
++----+-------+--------+------------+
+5 rows in set (0.00 sec)
+
+=========================================================================== UC5 ====================================================================================================
+
+mysql> SELECT * FROM employee_payroll;
++----+-------+--------+------------+
+| id | name  | salary | start      |
++----+-------+--------+------------+
+|  1 | Tom   | 900000 | 2012-09-23 |
+|  2 | John  | 800000 | 2020-11-20 |
+|  3 | Anna  | 700000 | 2013-12-09 |
+|  4 | Maria | 400000 | 2016-12-09 |
+|  5 | Harry | 300000 | 2021-12-07 |
++----+-------+--------+------------+
+5 rows in set (0.00 sec)
+
+
+mysql> SELECT * FROM employee_payroll WHERE start BETWEEN CAST('2016-09-22' AS DATE) AND DATE(NOW());
++----+-------+--------+------------+
+| id | name  | salary | start      |
++----+-------+--------+------------+
+|  2 | John  | 800000 | 2020-11-20 |
+|  4 | Maria | 400000 | 2016-12-09 |
+|  5 | Harry | 300000 | 2021-12-07 |
++----+-------+--------+------------+
+3 rows in set (0.01 sec)
+
+
+================================================================== UC6 =================================================================================
+
+                                                 ADDING FIELD AND INSERTING VALUES
+                                                ***********************************
+
+mysql> ALTER TABLE employee_payroll ADD gender CHAR(1) AFTER name;
+Query OK, 0 rows affected (0.05 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM employee_payroll;
++----+-------+--------+--------+------------+
+| id | name  | gender | salary | start      |
++----+-------+--------+--------+------------+
+|  1 | Tom   | NULL   | 900000 | 2012-09-23 |
+|  2 | John  | NULL   | 800000 | 2020-11-20 |
+|  3 | Anna  | NULL   | 700000 | 2013-12-09 |
+|  4 | Maria | NULL   | 400000 | 2016-12-09 |
+|  5 | Harry | NULL   | 300000 | 2021-12-07 |
++----+-------+--------+--------+------------+
+5 rows in set (0.00 sec)
+
+mysql> update employee_payroll set gender = "M" where name = 'Tom';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update employee_payroll set gender = "M" where name = 'John' or name = 'Harry';
+Query OK, 2 rows affected (0.01 sec)
+Rows matched: 2  Changed: 2  Warnings: 0
+
+mysql> update employee_payroll set gender = "F" where name = 'Anna' or name = 'Maria';
+Query OK, 2 rows affected (0.01 sec)
+Rows matched: 2  Changed: 2  Warnings: 0
+
+mysql> SELECT * FROM employee_payroll;
++----+-------+--------+--------+------------+
+| id | name  | gender | salary | start      |
++----+-------+--------+--------+------------+
+|  1 | Tom   | M      | 900000 | 2012-09-23 |
+|  2 | John  | M      | 800000 | 2020-11-20 |
+|  3 | Anna  | F      | 700000 | 2013-12-09 |
+|  4 | Maria | F      | 400000 | 2016-12-09 |
+|  5 | Harry | M      | 300000 | 2021-12-07 |
++----+-------+--------+--------+------------+
+5 rows in set (0.00 sec)
+
+===================================================================== UC7 =====================================================================
+
+                                 Ability to find sum, average, min, max and number of male and female employees
+                               **********************************************************************************
+
+mysql> update employee_payroll set salary=5000000.00 where name = 'Anna';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> SELECT * FROM employee_payroll;
++----+-------+--------+---------+------------+
+| id | name  | gender | salary  | start      |
++----+-------+--------+---------+------------+
+|  1 | Tom   | M      |  900000 | 2012-09-23 |
+|  2 | John  | M      |  800000 | 2020-11-20 |
+|  3 | Anna  | F      | 5000000 | 2013-12-09 |
+|  4 | Maria | F      |  400000 | 2016-12-09 |
+|  5 | Harry | M      |  300000 | 2021-12-07 |
++----+-------+--------+---------+------------+
+5 rows in set (0.00 sec)
+
+
+mysql> SELECT AVG(salary) FROM employee_payroll WHERE gender = 'M' GROUP BY gender;
++-------------------+
+| AVG(salary)       |
++-------------------+
+| 666666.6666666666 |
++-------------------+
+1 row in set (0.01 sec)
+
+mysql> SELECT AVG(salary) FROM employee_payroll WHERE gender = 'F' GROUP BY gender;
++-------------+
+| AVG(salary) |
++-------------+
+|     2700000 |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT  AVG(salary) FROM employee_payroll GROUP BY gender;
++-------------------+
+| AVG(salary)       |
++-------------------+
+| 666666.6666666666 |
+|           2700000 |
++-------------------+
+2 rows in set (0.01 sec)
+
+mysql> SELECT gender, AVG(salary) FROM employee_payroll GROUP BY gender;
++--------+-------------------+
+| gender | AVG(salary)       |
++--------+-------------------+
+| M      | 666666.6666666666 |
+| F      |           2700000 |
++--------+-------------------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT gender, COUNT(name) FROM employee_payroll GROUP BY gender;
++--------+-------------+
+| gender | COUNT(name) |
++--------+-------------+
+| M      |           3 |
+| F      |           2 |
++--------+-------------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT gender, SUM(salary) FROM employee_payroll GROUP BY gender;
++--------+-------------+
+| gender | SUM(salary) |
++--------+-------------+
+| M      |     2000000 |
+| F      |     5400000 |
++--------+-------------+
+2 rows in set (0.00 sec)
+
+
+======================================================================= UC8 =======================================================================================================
+
+    Ability to extend employee_payroll data to store employee information like employee phone, address and department - Ensure employee department
+  **************************************************************************************************************************************************
+
+mysql> update employee_payroll set Tax = '10000' where name = 'Maria' or name = 'John';
+Query OK, 2 rows affected (0.01 sec)
+Rows matched: 2  Changed: 2  Warnings: 0
+
+mysql> update employee_payroll set Tax = '9000' where name = 'Anna' or name = 'Tom';
+Query OK, 2 rows affected (0.01 sec)
+Rows matched: 2  Changed: 2  Warnings: 0
+
+mysql> update employee_payroll set Tax = '11000' where name = 'Harry';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update employee_payroll set TaxPayable = '4000' where name = 'Anna';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update employee_payroll set TaxPayable = '2000' where name = 'Tom';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update employee_payroll set TaxPayable = '5000' where name = 'john';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update employee_payroll set TaxPayable = '7000' where name = 'Harry';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> update employee_payroll set TaxPayable = '3000' where name = 'Maria';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> SELECT * FROM employee_payroll;
++----+-------+--------+------------+-----------+-------------+---------+-------+------------+------------+
+| id | name  | gender | Department | Address   | PhoneNumber | salary  | Tax   | TaxPayable | start      |
++----+-------+--------+------------+-----------+-------------+---------+-------+------------+------------+
+|  1 | Tom   | M      | xyz        | Goa       | 456123789   |  900000 | 9000  | 2000       | 2012-09-23 |
+|  2 | John  | M      | xyz        | Karnataka | 123456789   |  800000 | 10000 | 5000       | 2020-11-20 |
+|  3 | Anna  | F      | abc        | Kerala    | 412378569   | 5000000 | 9000  | 4000       | 2013-12-09 |
+|  4 | Maria | F      | pqr        | TamilNadu | 5746238889  |  400000 | 10000 | 3000       | 2016-12-09 |
+|  5 | Harry | M      | abc        | Kerala    | 6746238889  |  300000 | 11000 | 7000       | 2021-12-07 |
++----+-------+--------+------------+-----------+-------------+---------+-------+------------+------------+
+5 rows in set (0.00 sec)
+
+
+
+================================================================= UC9 ======================================================================================================
+
+            Ability to extend employee_payroll table to have Basic Pay, Deductions, Taxable Pay, Income Tax, Net Pay
+           ***********************************************************************************************************
+
+mysql> ALTER TABLE employee_payroll ADD BasicPay CHAR(10) AFTER salary;
+Query OK, 0 rows affected (0.05 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> ALTER TABLE employee_payroll ADD NetPay CHAR(10) AFTER Tax;
+Query OK, 0 rows affected (0.02 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+
+mysql> SELECT * FROM employee_payroll;
++----+-------+--------+------------+-----------+-----------+---------+----------+--------+-------+------------+------------+
+| id | name  | gender | Department | Address   | PhnNo     | salary  | BasicPay | NetPay | Tax   | TaxPayable | start      |
++----+-------+--------+------------+-----------+-----------+---------+----------+--------+-------+------------+------------+
+|  1 | Tom   | M      | xyz        | Goa       | 944654321 |  900000 | 50,000   | NULL   | 9000  | 2000       | 2012-09-23 |
+|  2 | John  | M      | xyz        | Gujarat   | 986673436 |  800000 | 50,000   | NULL   | 9000  | 5000       | 2020-11-20 |
+|  3 | Anna  | F      | abc        | Kerala    | 988654321 |  500000 | 50,000   | NULL   | 10000 | 4000       | 2013-12-09 |
+|  4 | Maria | F      | pqr        | TamilNadu | 922654321 |  400000 | 50,000   | NULL   | 9000  | 3000       | 2016-12-09 |
+|  5 | Harry | M      | abc        | Kerala    | 966654321 | 5000000 | 50,000   | NULL   | 12000 | 7000       | 2021-12-07 |
++----+-------+--------+------------+-----------+-----------+---------+----------+--------+-------+------------+------------+
+5 rows in set (0.00 sec)
+
+
+========================================================================== UC 10 ==================================================================================================
+
+                                                Ability to make Terissa as part of Sales Department
+                                               *******************************************************
+
+mysql> INSERT INTO employee_payroll(name,gender,department,Address,PhnNo,salary,BasicPay,Tax,TaxPayable,start) VALUES('Terrisa','F','sales','Rajasthan','8765432128',600000.00,'50,000',5000,2000,'2010-06-03');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> SELECT * FROM employee_payroll;
++----+---------+--------+------------+-----------+------------+---------+----------+-------+------------+------------+
+| id | name    | gender | Department | Address   | PhnNo      | salary  | BasicPay | Tax   | TaxPayable | start      |
++----+---------+--------+------------+-----------+------------+---------+----------+-------+------------+------------+
+|  1 | Tom     | M      | xyz        | Goa       | 944654321  |  900000 | 50,000   | 9000  | 2000       | 2012-09-23 |
+|  2 | John    | M      | xyz        | Gujarat   | 986673436  |  800000 | 50,000   | 9000  | 5000       | 2020-11-20 |
+|  3 | Anna    | F      | abc        | Kerala    | 988654321  |  500000 | 50,000   | 10000 | 4000       | 2013-12-09 |
+|  4 | Maria   | F      | pqr        | TamilNadu | 922654321  |  400000 | 50,000   | 9000  | 3000       | 2016-12-09 |
+|  5 | Harry   | M      | abc        | Kerala    | 966654321  | 5000000 | 50,000   | 12000 | 7000       | 2021-12-07 |
+|  6 | Terrisa | F      | sales      | Rajasthan | 8765432128 |  600000 | 50,000   | 5000  | 2000       | 2010-06-03 |
++----+---------+--------+------------+-----------+------------+---------+----------+-------+------------+------------+
+6 rows in set (0.00 sec)
+
+mysql> INSERT INTO employee_payroll(name,gender,department,Address,PhnNo,salary,BasicPay,Tax,TaxPayable,start) VALUES('Terrisa','F','sales','punjab','411132128',600000.00,'50,000',5000,2000,'2021-06-18');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> SELECT * FROM employee_payroll;
++----+---------+--------+------------+-----------+------------+---------+----------+-------+------------+------------+
+| id | name    | gender | Department | Address   | PhnNo      | salary  | BasicPay | Tax   | TaxPayable | start      |
++----+---------+--------+------------+-----------+------------+---------+----------+-------+------------+------------+
+|  1 | Tom     | M      | xyz        | Goa       | 944654321  |  900000 | 50,000   | 9000  | 2000       | 2012-09-23 |
+|  2 | John    | M      | xyz        | Gujarat   | 986673436  |  800000 | 50,000   | 9000  | 5000       | 2020-11-20 |
+|  3 | Anna    | F      | abc        | Kerala    | 988654321  |  500000 | 50,000   | 10000 | 4000       | 2013-12-09 |
+|  4 | Maria   | F      | pqr        | TamilNadu | 922654321  |  400000 | 50,000   | 9000  | 3000       | 2016-12-09 |
+|  5 | Harry   | M      | abc        | Kerala    | 966654321  | 5000000 | 50,000   | 12000 | 7000       | 2021-12-07 |
+|  6 | Terrisa | F      | sales      | Rajasthan | 8765432128 |  600000 | 50,000   | 5000  | 2000       | 2010-06-03 |
+|  7 | Terrisa | F      | sales      | punjab    | 411132128  |  600000 | 50,000   | 5000  | 2000       | 2021-06-18 |
++----+---------+--------+------------+-----------+------------+---------+----------+-------+------------+------------+
+7 rows in set (0.00 sec)
+
+mysql>
+
+
+==================================================================== UC11 ============================================================================================================================
+
+                                                Implement the ER Diagram into Payroll Service DB
+                                               **************************************************
+
+mysql>       CREATE TABLE DEPARTMENT(
+    ->      DepartmentId INT not null,
+    ->      EmpId INT unsigned NOT NULL,
+    ->      primary key(EmpId),
+    ->      foreign key(EmpId) references employee_payroll(id));
+Query OK, 0 rows affected (0.02 sec)
+
+
+mysql> INSERT INTO DEPARTMENT(DepartmentId,EmpId) VALUES (3,1),(6,2),(1,3),(5,4);
+Query OK, 4 rows affected (0.01 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM DEPARTMENT;
++--------------+-------+
+| DepartmentId | EmpId |
++--------------+-------+
+|            3 |     1 |
+|            6 |     2 |
+|            1 |     3 |
+|            5 |     4 |
++--------------+-------+
+4 rows in set (0.00 sec)
